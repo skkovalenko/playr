@@ -1,20 +1,39 @@
 package org.skkov.playr.impl.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
-import org.skkov.playr.api.dto.UserDTO;
-import org.skkov.playr.domain.model.UserProfile;
+import org.mapstruct.Mapping;
+import org.skkov.playr.api.dto.UserDto;
+import org.skkov.playr.api.dto.auth.RegisterRequest;
+import org.skkov.playr.domain.tables.records.UserProfileRecord;
 
 /**
- * Описание UserMapper.
+ * Преобразователь для работы с пользователем.
  *
  * @author SKKOV
  */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-  UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
+  /**
+   * Преобразование.
+   *
+   * @param user профиль пользователя
+   * @return Дто пользователя
+   */
+  UserDto toDto(UserProfileRecord user);
 
-  UserDTO toDTO(UserProfile user);
-  UserProfile toEntity(UserDTO dto);
+  /**
+   * Преобразование.
+   *
+   * @param dto Дто пользователя
+   * @return профиль пользователя
+   */
+  UserProfileRecord toEntity(UserDto dto);
 
+  /**
+   * Преобразование.
+   *
+   * @param request запрос на регистрацию
+   * @return профиль пользователя
+   */
+  UserProfileRecord toEntity(RegisterRequest request);
 }

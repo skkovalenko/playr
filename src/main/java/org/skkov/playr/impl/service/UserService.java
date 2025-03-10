@@ -1,15 +1,14 @@
-package org.skkov.playr.impl.service.user;
-
-import lombok.RequiredArgsConstructor;
-import org.skkov.playr.api.dto.UserDTO;
-import org.skkov.playr.domain.repositoty.UserRepository;
-import org.skkov.playr.impl.mapper.UserMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+package org.skkov.playr.impl.service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.skkov.playr.api.dto.UserDto;
+import org.skkov.playr.domain.repositoty.UserRepository;
+import org.skkov.playr.impl.mapper.UserMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Сервис для управления пользователями.
@@ -23,22 +22,20 @@ public class UserService {
   /**
    * Получить профиль пользователя по ID.
    */
-  public Optional<UserDTO> getUserById(UUID id) {
-    return userRepository.findById(id).map(user -> userMapper.toDTO(user));
+  public Optional<UserDto> getUserById(UUID id) {
+    return userRepository.findById(id).map(userMapper::toDto);
   }
 
   /**
    * Обновить профиль пользователя.
    */
-  public UserDTO updateUser(UUID id, UserDTO userDTO) {
-    return userRepository.findById(id)
-        .map(user -> {
-          user.setFirstName(userDTO.getFirstName());
-          user.setLastName(userDTO.getLastName());
-          user.setEmail(userDTO.getEmail());
-          return userMapper.toDTO(userRepository.save(user));
-        })
-        .orElseThrow(() -> new RuntimeException("UserProfile not found"));
+  public UserDto updateUser(UUID id, UserDto userDto) {
+    var foundUser = userRepository.findById(id);
+    if (foundUser.isPresent()) {
+      var user = userRepository.save(userMapper.toEntity(userDto));
+      return userMapper.toDto(user);
+    }
+    throw new RuntimeException("UserProfile not found");
   }
 
   /**

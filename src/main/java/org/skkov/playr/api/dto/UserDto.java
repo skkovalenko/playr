@@ -1,16 +1,12 @@
 package org.skkov.playr.api.dto;
 
-import lombok.*;
+import lombok.Data;
 
 /**
  * DTO пользователя для API.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class UserDTO {
+@Data
+public class UserDto {
   private String firstName;
   private String lastName;
   private String email;

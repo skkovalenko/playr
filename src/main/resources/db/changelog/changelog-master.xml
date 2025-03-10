@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+  <!-- Основной changelog файл -->
+  <include file="/db/changelog/v1/01_create_user_profile.xml"/>
+  <include file="/db/changelog/v1/02_create_event.xml"/>
+  <include file="/db/changelog/v1/03_create_refresh_token.xml"/>
+</databaseChangeLog>

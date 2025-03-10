@@ -1,3 +1,36 @@
+#
+jwt:
+  secret: your-secure-secret-key-your-secure-secret-key
+  accessToken:
+    expiration: 30000  # 30 сек в миллисекундах
+  refreshToken:
+    expiration: 604800000  # 7 дней в миллисекундах
+
 spring:
+
+  #
   application:
     name: 'playr-server'
+
+  #
+  liquibase:
+    change-log: db/changelog/changelog-master.xml
+    default-schema: playr
+    password: postgres
+    user: postgres
+    url: jdbc:postgresql://localhost:5432/skkov
+
+  #
+  datasource:
+    url: jdbc:postgresql://localhost:5432/skkov
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      schema: playr
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      pool-name: PlayrHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 20000

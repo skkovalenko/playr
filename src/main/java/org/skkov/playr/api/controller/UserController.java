@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.skkov.playr.api.dto.UserDTO;
-import org.skkov.playr.impl.service.user.UserService;
+import org.skkov.playr.api.dto.UserDto;
+import org.skkov.playr.impl.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,24 +18,25 @@ import java.util.UUID;
  * Предоставляет API для получения, обновления профиля, загрузки аватаров и просмотра мероприятий.
  */
 @RestController
-@RequestMapping("/users")
 @RequiredArgsConstructor
+@RequestMapping("/users")
 @Tag(name = "Пользователи", description = "API для работы с профилями пользователей")
 public class UserController {
-
   private final UserService userService;
 
   /**
    * Получить профиль пользователя по его идентификатору.
    *
    * @param id UUID пользователя
-   * @return ResponseEntity с UserDTO, если найден, или 404 Not Found
+   * @return ResponseEntity с UserDto, если найден, или 404 Not Found
    */
   @Operation(summary = "Получить профиль пользователя")
   @GetMapping("/{id}")
-  public ResponseEntity<UserDTO> getUser(@PathVariable UUID id) {
-    Optional<UserDTO> user = userService.getUserById(id);
-    return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+  public ResponseEntity<UserDto> getUser(@PathVariable UUID id) {
+    Optional<UserDto> user = userService.getUserById(id);
+    return user
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   /**
@@ -43,11 +44,11 @@ public class UserController {
    *
    * @param id      UUID пользователя
    * @param userDTO DTO с обновлёнными данными
-   * @return ResponseEntity с обновленным UserDTO
+   * @return ResponseEntity с обновленным UserDto
    */
   @Operation(summary = "Обновить профиль пользователя")
   @PutMapping("/{id}")
-  public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO) {
+  public ResponseEntity<UserDto> updateUser(@PathVariable UUID id, @RequestBody UserDto userDTO) {
     return ResponseEntity.ok(userService.updateUser(id, userDTO));
   }
 
