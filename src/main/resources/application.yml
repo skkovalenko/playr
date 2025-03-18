@@ -2,7 +2,7 @@
 jwt:
   secret: your-secure-secret-key-your-secure-secret-key
   accessToken:
-    expiration: 30000  # 30 сек в миллисекундах
+    expiration: 600000  # 10 мин в миллисекундах
   refreshToken:
     expiration: 604800000  # 7 дней в миллисекундах
 

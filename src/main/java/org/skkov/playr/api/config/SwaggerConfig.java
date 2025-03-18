@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
   /**
    * Определяет базовую информацию о API.
+   *
    * @return OpenAPI с настройками.
    */
   @Bean
@@ -22,14 +23,14 @@ public class SwaggerConfig {
     return new OpenAPI()
         .info(
             new Info()
-            .title("Playr API")
-            .version("1.0")
-            .description("Документация API для сервера Playr")
+                .title("Playr API")
+                .version("1.0")
+                .description("Документация API для сервера Playr")
         )
         .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
         .components(
             new Components().addSecuritySchemes(
-                    "BearerAuth",
+                "BearerAuth",
                 new SecurityScheme()
                     .type(SecurityScheme.Type.HTTP)
                     .scheme("bearer")
