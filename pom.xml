@@ -127,6 +127,40 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen-maven</artifactId>
+        <version>${jooq.version}</version>
+        <executions>
+          <execution>
+            <id>jooq-codegen</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generator>
+                <database>
+                  <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                  <excludes>databasechangelog|databasechangeloglock</excludes>
+                  <includes>.*</includes>
+                  <inputSchema>playr</inputSchema>
+                </database>
+                <target>
+                  <packageName>org.skkov.playr.domain</packageName>
+                  <directory>target/generated-sources/jooq</directory>
+                </target>
+              </generator>
+              <jdbc>
+                <driver>org.postgresql.Driver</driver>
+                <url>jdbc:postgresql://localhost:5432/skkov</url>
+                <user>postgres</user>
+                <password>postgres</password>
+              </jdbc>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -177,40 +211,6 @@
         <configuration>
           <propertyFile>src/main/resources/liquibase.properties</propertyFile>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jooq</groupId>
-        <artifactId>jooq-codegen-maven</artifactId>
-        <version>${jooq.version}</version>
-        <executions>
-          <execution>
-            <id>jooq-codegen</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <generator>
-                <database>
-                  <name>org.jooq.meta.postgres.PostgresDatabase</name>
-                  <excludes>databasechangelog|databasechangeloglock</excludes>
-                  <includes>.*</includes>
-                  <inputSchema>playr</inputSchema>
-                </database>
-                <target>
-                  <packageName>org.skkov.playr.domain</packageName>
-                  <directory>target/generated-sources/jooq</directory>
-                </target>
-              </generator>
-              <jdbc>
-                <driver>org.postgresql.Driver</driver>
-                <url>jdbc:postgresql://localhost:5432/skkov</url>
-                <user>postgres</user>
-                <password>postgres</password>
-              </jdbc>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
