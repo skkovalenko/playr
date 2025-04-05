@@ -36,7 +36,7 @@ public class RefreshTokenRepository {
     context
         .insertInto(RefreshToken.REFRESH_TOKEN)
         .set(REFRESH_TOKEN.ID, refreshToken.getId())
-        .set(REFRESH_TOKEN.USER_PROFILE_ID, refreshToken.getUserProfileId())
+        .set(REFRESH_TOKEN.ACCOUNT_ID, refreshToken.getAccountId())
         .set(REFRESH_TOKEN.TOKEN, refreshToken.getToken())
         .set(REFRESH_TOKEN.EXPIRES_AT, refreshToken.getExpiresAt())
         .set(REFRESH_TOKEN.REVOKED, refreshToken.getRevoked())
@@ -48,7 +48,7 @@ public class RefreshTokenRepository {
   public void deleteByUserId(UUID id) {
     context
         .deleteFrom(RefreshToken.REFRESH_TOKEN)
-        .where(REFRESH_TOKEN.USER_PROFILE_ID.eq(id))
+        .where(REFRESH_TOKEN.ACCOUNT_ID.eq(id))
         .execute();
   }
 

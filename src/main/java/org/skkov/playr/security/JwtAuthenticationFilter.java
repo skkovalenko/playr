@@ -37,7 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     if (token != null && jwtProvider.validateToken(token)) {
       String username = jwtProvider.getUsernameFromToken(token);
-      List<GrantedAuthority> authorities = jwtProvider.getAuthoritiesFromToken(token); // Получаем роли из токена
+      List<GrantedAuthority> authorities = jwtProvider
+          .getAuthoritiesFromToken(token); // Получаем роли из токена
 
       var authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
       authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -50,7 +51,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private String extractToken(HttpServletRequest request) {
     String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    return (authHeader != null && authHeader.startsWith("Bearer ")) ? authHeader.substring(7)
-        : null;
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+      return authHeader.substring(7);
+    }
+    return null;
   }
 }

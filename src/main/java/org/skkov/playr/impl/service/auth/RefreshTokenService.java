@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.skkov.playr.domain.repositoty.RefreshTokenRepository;
+import org.skkov.playr.domain.tables.records.AccountRecord;
 import org.skkov.playr.domain.tables.records.RefreshTokenRecord;
 import org.skkov.playr.domain.tables.records.UserProfileRecord;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class RefreshTokenService {
   private final RefreshTokenRepository refreshTokenRepository;
 
-  public RefreshTokenRecord storeRefreshToken(UUID userId, String token) {
+  public RefreshTokenRecord storeRefreshToken(UUID accountId, String token) {
     var refreshToken = new RefreshTokenRecord();
     refreshToken.setId(UUID.randomUUID());
-    refreshToken.setUserProfileId(userId);
+    refreshToken.setAccountId(accountId);
     refreshToken.setToken(token); // Можно заменить на более безопасный генератор
     refreshToken.setExpiresAt(LocalDateTime.now().plusDays(7)); // Токен живёт 7 дней
     refreshToken.setRevoked(false);
@@ -32,7 +33,7 @@ public class RefreshTokenService {
   }
 
   @Transactional
-  public void revokeTokens(UserProfileRecord user) {
+  public void revokeTokens(AccountRecord user) {
     refreshTokenRepository.deleteByUserId(user.getId());
   }
 

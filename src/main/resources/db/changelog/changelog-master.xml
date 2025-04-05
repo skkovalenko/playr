@@ -6,7 +6,9 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
 
   <!-- Основной changelog файл -->
-  <include file="/db/changelog/v1/01_create_user_profile.xml"/>
-  <include file="/db/changelog/v1/02_create_event.xml"/>
-  <include file="/db/changelog/v1/03_create_refresh_token.xml"/>
+  <include file="/db/changelog/v1/01_create_account.xml"/>
+  <include file="/db/changelog/v1/02_create_refresh_token.xml"/>
+  <include file="/db/changelog/v1/03_create_user_profile.xml"/>
+  <include file="/db/changelog/v1/04_create_event.xml"/>
+  <include file="/db/changelog/v1/05_create_user_event.xml"/>
 </databaseChangeLog>

@@ -1,10 +1,9 @@
 package org.skkov.playr.impl.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.skkov.playr.api.dto.UserDto;
+import org.skkov.playr.api.dto.account.AccountDto;
 import org.skkov.playr.api.dto.auth.RegisterRequest;
-import org.skkov.playr.domain.tables.records.UserProfileRecord;
+import org.skkov.playr.domain.tables.records.AccountRecord;
 
 /**
  * Преобразователь для работы с пользователем.
@@ -12,14 +11,14 @@ import org.skkov.playr.domain.tables.records.UserProfileRecord;
  * @author SKKOV
  */
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface AccountMapper {
   /**
    * Преобразование.
    *
    * @param user профиль пользователя
    * @return Дто пользователя
    */
-  UserDto toDto(UserProfileRecord user);
+  AccountDto toDto(AccountRecord user);
 
   /**
    * Преобразование.
@@ -27,7 +26,7 @@ public interface UserMapper {
    * @param dto Дто пользователя
    * @return профиль пользователя
    */
-  UserProfileRecord toEntity(UserDto dto);
+  AccountRecord toEntity(AccountDto dto);
 
   /**
    * Преобразование.
@@ -35,5 +34,5 @@ public interface UserMapper {
    * @param request запрос на регистрацию
    * @return профиль пользователя
    */
-  UserProfileRecord toEntity(RegisterRequest request);
+  AccountRecord toEntity(RegisterRequest request);
 }

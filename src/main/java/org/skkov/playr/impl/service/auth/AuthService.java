@@ -7,9 +7,9 @@ import org.skkov.playr.api.dto.auth.LoginRequest;
 import org.skkov.playr.api.dto.auth.RefreshTokenRequest;
 import org.skkov.playr.api.dto.auth.RegisterRequest;
 import org.skkov.playr.api.dto.auth.ResetPasswordRequest;
-import org.skkov.playr.domain.repositoty.UserRepository;
-import org.skkov.playr.domain.tables.records.UserProfileRecord;
-import org.skkov.playr.impl.mapper.UserMapper;
+import org.skkov.playr.domain.repositoty.AccountRepository;
+import org.skkov.playr.domain.tables.records.AccountRecord;
+import org.skkov.playr.impl.mapper.AccountMapper;
 import org.skkov.playr.security.JwtProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,9 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-  private final UserRepository userRepository;
+  private final AccountRepository accountRepository;
   private final PasswordEncoder passwordEncoder;
-  private final UserMapper userMapper;
+  private final AccountMapper accountMapper;
   private final JwtProvider jwtProvider;
   private final RefreshTokenService refreshTokenService;
 
@@ -31,14 +31,14 @@ public class AuthService {
    * Регистрация нового пользователя.
    */
   public AuthResponse register(RegisterRequest request) {
-    if (userRepository.existsByEmail(request.getEmail())) {
+    if (accountRepository.existsByEmail(request.getEmail())) {
       throw new RuntimeException("Email is already in use");
     }
-    var user = userMapper.toEntity(request);
+    var user = accountMapper.toEntity(request);
     user.setId(UUID.randomUUID());
     user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-    userRepository.save(user);
+    accountRepository.save(user);
 
     String token = jwtProvider.generateAccessToken(user.getEmail());
     return new AuthResponse(token, jwtProvider.generateRefreshToken(user.getEmail()));
@@ -48,13 +48,13 @@ public class AuthService {
    * Аутентификация пользователя.
    */
   public AuthResponse login(LoginRequest request) {
-    UserProfileRecord user = userRepository
+    AccountRecord account = accountRepository
         .findByEmail(request.getEmail())
         .orElseThrow(() -> new RuntimeException("User not found"));
 
     String token = jwtProvider.generateAccessToken(request.getEmail());
     String refreshToken = jwtProvider.generateRefreshToken(request.getEmail());
-    refreshTokenService.storeRefreshToken(user.getId(), refreshToken);
+    refreshTokenService.storeRefreshToken(account.getId(), refreshToken);
 
     return new AuthResponse(token, refreshToken);
   }
@@ -70,7 +70,7 @@ public class AuthService {
     }
 
     String email = jwtProvider.getEmailFromToken(refreshToken);
-    var user = userRepository
+    var user = accountRepository
         .findByEmail(email)
         .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -90,12 +90,12 @@ public class AuthService {
    * Восстановление пароля.
    */
   public void resetPassword(ResetPasswordRequest request) {
-    var userOptional = userRepository.findByEmail(request.getEmail());
+    var userOptional = accountRepository.findByEmail(request.getEmail());
     if (userOptional.isPresent()) {
       var user = userOptional.get();
       String newPassword = "newRandomPassword"; // Нужно заменить на генератор пароля
       user.setPassword(passwordEncoder.encode(newPassword));
-      userRepository.save(user);
+      accountRepository.save(user);
       // Отправить новый пароль пользователю на email
     }
   }

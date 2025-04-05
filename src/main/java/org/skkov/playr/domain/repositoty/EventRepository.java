@@ -36,7 +36,7 @@ public class EventRepository {
         .set(EVENT.END_TIME, event.getEndTime())
         .set(EVENT.LOCATION, event.getLocation())
         .set(EVENT.MAX_PARTICIPANTS, event.getMaxParticipants())
-        .set(EVENT.ORGANIZER_USER_PROFILE_ID, event.getOrganizerUserProfileId())
+        .set(EVENT.ORGANIZER_ACCOUNT_ID, event.getOrganizerAccountId())
         .execute();
 
     return event;
@@ -62,7 +62,8 @@ public class EventRepository {
    * @return Список мероприятий
    */
   public List<EventRecord> findAll() {
-    return context.selectFrom(EVENT)
+    return context
+        .selectFrom(EVENT)
         .fetch()
         .map(EVENT::from);
   }
