@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.skkov.playr.event.dto.EventDto;
 import org.skkov.playr.event.service.EventService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -98,8 +99,8 @@ public class EventController {
    * @return Подтверждение отправки заявки.
    */
   @PostMapping("/{id}/join")
-  public ResponseEntity<String> joinEvent(@PathVariable UUID id) {
-    eventService.joinEvent(id);
+  public ResponseEntity<String> joinEvent(@PathVariable UUID id, Authentication authentication) {
+    eventService.joinEvent(id, authentication);
     return ResponseEntity.ok("Request to join event sent.");
   }
 
@@ -113,9 +114,42 @@ public class EventController {
   @PostMapping("/{id}/approve")
   public ResponseEntity<String> approveParticipant(
       @PathVariable UUID id,
-      @RequestParam UUID userId
+      @RequestParam UUID userId,
+      Authentication authentication
   ) {
-    eventService.approveParticipant(id, userId);
+    eventService.approveParticipant(id, userId, authentication);
     return ResponseEntity.ok("Participant approved.");
+  }
+
+  /**
+   * Отмена участия в мероприятии.
+   *
+   * @param id ID мероприятия
+   * @param authentication текущий пользователь
+   */
+  @PostMapping("/{id}/leave")
+  public ResponseEntity<String> leaveEvent(
+      @PathVariable UUID id,
+      Authentication authentication
+  ) {
+    eventService.cancelParticipation(id, authentication);
+    return ResponseEntity.ok("Participation cancelled.");
+  }
+
+  /**
+   * Отклонить заявку участника мероприятия.
+   *
+   * @param id ID мероприятия
+   * @param userId ID участника
+   * @param authentication текущий пользователь (организатор)
+   */
+  @PostMapping("/{id}/reject")
+  public ResponseEntity<String> rejectParticipant(
+      @PathVariable UUID id,
+      @RequestParam UUID userId,
+      Authentication authentication
+  ) {
+    eventService.rejectParticipant(id, userId, authentication);
+    return ResponseEntity.ok("Participant rejected.");
   }
 }
